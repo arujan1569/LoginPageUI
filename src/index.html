@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Google Login</title>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+        <h1>Firebase Google Auth</h1>
+        <button id="loginBtn" style="padding: 10px 20px; cursor: pointer;">Login with Google</button>
+        
+        <h3>Access Token:</h3>
+        <p id="tokenDisplay" style="word-break: break-all; color: blue; padding: 20px; border: 1px solid #ccc; margin: 10px; min-height: 50px;"></p>
+    </div>
+
+    <script type="module">
+        // 1. Import necessary Firebase modules from CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // 2. Your specific Firebase configuration
+       const firebaseConfig = {
+  apiKey: "AIzaSyCT0u4y34tRFgcRzthSYwipZ6Mtt0eEufI",
+  authDomain: "loginpage-80b6b.firebaseapp.com",
+  projectId: "loginpage-80b6b",
+  storageBucket: "loginpage-80b6b.firebasestorage.app",
+  messagingSenderId: "28030104862",
+  appId: "1:28030104862:web:3e6cda475efd749ae1450f",
+  measurementId: "G-V43TE31C7Z"
+};
+
+        // 3. Initialize Firebase and Auth
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 4. Login Functionality
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // This extracts the Google Access Token as required by the assignment
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    
+                    // Display the token in the UI
+                    document.getElementById('tokenDisplay').innerText = token;
+                    console.log("Success! Access Token:", token);
+                })
+                .catch((error) => {
+                    console.error("Error during login:", error.code, error.message);
+                    alert("Login failed: " + error.message);
+                });
+        });
+    </script>
+</body>
+</html>
